@@ -6,7 +6,7 @@ namespace PIMIII
     public partial class Form1 : Form
     {
         private static HttpClient _client = new HttpClient();
-        private string _apiKey = "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";
+        private string _apiKey = "YOUR-API-KEY";
 
         public Form1()
         {
@@ -18,7 +18,7 @@ namespace PIMIII
             string userMessage = txtInput.Text;
             if (string.IsNullOrWhiteSpace(userMessage)) return;
 
-            rtbChat.AppendText("Você: " + userMessage + "\n\n");
+            rtbChat.AppendText("VocÃª: " + userMessage + "\n\n");
             txtInput.Clear();
 
             string response = await GetChatGPTResponse(userMessage);
@@ -64,3 +64,4 @@ namespace PIMIII
         }
     }
 }
+
