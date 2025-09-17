@@ -1,3 +1,4 @@
+using System.Data.SqlClient;
 using System.Text;
 using System.Text.Json;
 
@@ -7,10 +8,12 @@ namespace PIMIII
     {
         private static HttpClient _client = new HttpClient();
         private string _apiKey = "YOUR-API-KEY";
+        private string connectionString = "Server=localhost;Database=YourDatabase;Trusted_Connection=True";
 
         public Form1()
         {
             InitializeComponent();
+            toolTip1.SetToolTip(pictureBox1, "Clique para saber mais sobre nós!");
         }
 
         private async void btnSend_Click(object sender, EventArgs e)
@@ -57,7 +60,44 @@ namespace PIMIII
                       .GetString()
                       .Trim();
         }
+
+                private void Consultar_Click(object sender, EventArgs e)
+        {
+            using (SqlConnection conn = new SqlConnection(connectionString))
+            {
+                conn.Open();
+                string sql = "SELECT * FROM Tecnicos";
+                SqlCommand cmd = new SqlCommand(sql, conn);
+                SqlDataReader reader = cmd.ExecuteReader();
+        
+                string resultado = "";
+        
+                while (reader.Read())
+                {
+                    int matricula = reader.GetInt32(0);
+                    string nome = reader["Nome"].ToString();
+                    string email = reader["Email"].ToString();
+                    string telefone = reader["Telefone"].ToString();
+                    string especialidade = reader["Especialidade"].ToString();
+        
+                    resultado += $"Matrícula {matricula}\n" +
+                        $"Nome: {nome}\n" +
+                        $"Email: {email}\n" +
+                        $"Telefone: {telefone}\n" +
+                        $"Especialidade: {especialidade}\n" +
+                        $"--------------------------------\n";
+                }
+        
+                reader.Close();
+        
+                MessageBox.Show(resultado, "Técnicos disponíveis:");
+            }
+        }
+        
+        private void pictureBox1_Click(object sender, EventArgs e)
+        {
+            MessageBox.Show("Nós, Axis Tecnologia, temos o objetivo de entregar aplicações simples e de fácil utilização" +
+                " para a maioria dos trabalhadores!", "Sobre nós");
+        }
     }
 }
-
-
